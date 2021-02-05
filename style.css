@@ -82,8 +82,8 @@ button:hover {
 }
 
 .button.cancel {
-  color: #e92929;
-  border: 2px #e92929 solid;
+  color: var(--negative-red);
+  border: 2px var(--negative-red) solid;
   border-radius: 0.25rem;
   height: 50px;
   display: flex;
@@ -151,6 +151,10 @@ header h1#logo {
   color: #fff;
 }
 
+.card.total.negative {
+  background: var(--negative-red);
+}
+
 /*table------------------------*/
 #trasaction {
   display: block;
@@ -204,6 +208,13 @@ td.income {
 
 td.expense {
   color: var(--negative-red);
+}
+
+
+td.edit img {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.9;
 }
 
 /*Modal------------------------*/

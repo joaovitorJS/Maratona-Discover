@@ -27,7 +27,6 @@ const Storage = {
   }
 }
 
-
 const Transaction = {
   all: Storage.get(),
 
@@ -40,6 +39,23 @@ const Transaction = {
   remove(index) {
     this.all.splice(index, 1);
     App.reload();
+  },
+
+  edit(index) {
+    //abre o Modal
+    Modal.open();
+    //coloca as informações anteriores
+    const description = document.querySelector('input#description');
+    const amount = document.querySelector('input#amount');
+    const date = document.querySelector('input#date');
+    const transaction = this.all[index];
+    
+
+    description.value = transaction.description;
+    amount.value = transaction.amount/100;
+    date.value = Utils.formatDateModal(transaction.date);
+
+    this.remove(index);
   },
 
   incomes() {
@@ -93,7 +109,9 @@ const DOM = {
       <td>
         <img onclick="Transaction.remove(${index})"src="./assets/minus.svg" alt="Remover transação">
       </td>
-
+      <td class="edit">
+        <img onclick="Transaction.edit(${index})" src="./assets/edit.svg" alt="Editar transação">
+      </td>
     `;
     return html;
   },
@@ -108,10 +126,27 @@ const DOM = {
     document
       .getElementById("totalDisplay")
       .innerHTML = Utils.formatCurrency(Transaction.total());
+    DOM.updateColorTotal();
   },
 
   clearTransactions() {
     DOM.transactionsContainer.innerHTML = "";
+  },
+
+  updateColorTotal() {
+    
+    if (Transaction.total() < 0) {
+      
+      document
+        .querySelector(".card.total")
+        .classList
+        .add("negative");
+    } else {
+      document
+        .querySelector(".card.total")
+        .classList
+        .remove("negative");
+    }
   }
 }
 
@@ -126,6 +161,14 @@ const Utils = {
     return `${splittedDate[2]}
             /${splittedDate[1]}
             /${splittedDate[0]}`;
+  },
+
+  formatDateModal(date) {
+    const dateReplace = String(date).replace(/\D/g, "");
+    const day = dateReplace[0] + dateReplace[1];
+    const month = dateReplace[2] + dateReplace[3];
+    const year = dateReplace[4] + dateReplace[5] + dateReplace[6] + dateReplace[7];
+    return `${year}-${month}-${day}`;
   },
 
   formatCurrency(value) {
@@ -210,7 +253,6 @@ const App = {
     });
     
     DOM.updateBalance();
-
     Storage.set(Transaction.all);
   },
 
