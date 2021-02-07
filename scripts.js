@@ -32,7 +32,7 @@ const Transaction = {
 
   add(transaction) {
     this.all.push(transaction);
-
+   
     App.reload();
   },
 
@@ -49,13 +49,17 @@ const Transaction = {
     const amount = document.querySelector('input#amount');
     const date = document.querySelector('input#date');
     const transaction = this.all[index];
-    
 
     description.value = transaction.description;
     amount.value = transaction.amount/100;
     date.value = Utils.formatDateModal(transaction.date);
-
-    this.remove(index);
+    var rem = true;
+    document.querySelector(".input-group.actions button").addEventListener("click", function(){      
+      if (rem) {
+        Transaction.remove(index);
+        rem = false;
+      }
+    });    
   },
 
   incomes() {
@@ -201,6 +205,7 @@ const Form = {
 
   validateFields() {
     const { description, amount, date } = Form.getValues();
+    console.log(description, amount, date);
     if ( description.trim() === "" ||
          amount.trim() === "" ||
          date.trim() === "" ) {
@@ -232,6 +237,7 @@ const Form = {
   },
 
   submit(event) {
+
     event.preventDefault();
 
     try {
@@ -243,7 +249,8 @@ const Form = {
     } catch(error) {
       alert(error.message);
     }
-  }
+  },
+
 }
 
 const App = {
